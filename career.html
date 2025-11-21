@@ -34,6 +34,7 @@
             background: var(--nav-bg);
             z-index: 1000;
             padding: 1rem 0;
+            -webkit-backdrop-filter: blur(8px);
             backdrop-filter: blur(8px);
         }
 
@@ -70,16 +71,31 @@
         }
 
         .career-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            display: block; /* container for the rows */
             margin-top: 2rem;
+        }
+
+        .company-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .three-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            border-top: 4px solid var(--secondary-color);
+            padding-top: 1.25rem;
+            margin-top: 1.25rem;
         }
 
         .career-card {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 2rem;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             transition: transform 0.3s ease;
         }
@@ -106,8 +122,51 @@
 
         h1 {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
             font-size: 2.5rem;
+        }
+
+        .page-subheading {
+            text-align: center;
+            color: rgba(255,255,255,0.92);
+            font-size: 1.05rem;
+            margin: 0 0 0.5rem;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+
+        .animated-divider {
+            width: 120px;
+            height: 6px;
+            margin: 0.25rem auto 1rem;
+            border-radius: 4px;
+            background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.04));
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fallback when backdrop-filter isn't available */
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .nav-container { background: rgba(86,61,124,0.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
+            .career-card, .three-grid, .company-row { background-color: rgba(0,0,0,0.30); }
+            .text-box { background-color: rgba(0,0,0,0.28); }
+        }
+
+        .animated-divider::after {
+            content: "";
+            position: absolute;
+            left: -40%;
+            top: 0;
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, transparent, rgba(233,150,122,0.9), transparent);
+            transform: skewX(-10deg);
+            animation: slide 2200ms linear infinite;
+        }
+
+        @keyframes slide {
+            from { left: -40%; }
+            to { left: 100%; }
         }
 
         h2 {
@@ -136,6 +195,31 @@
             color: var(--secondary-color);
             margin-right: 0.5rem;
         }
+        .company-thumb {
+            display: block;
+            width: 80%;
+            max-width: 480px;
+            margin: 1rem auto 0; /* center within the card */
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+            border: 2px solid #E9967A; /* warm site border color */
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        /* Slight hover pop on the image for interactivity */
+        .company-thumb:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.22);
+        }
+
+        /* Smaller screens: reduce size so it remains balanced */
+        @media (max-width: 520px) {
+            .company-thumb {
+                width: 92%;
+                max-width: 360px;
+                margin-top: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -150,45 +234,45 @@
         </ul>
     </nav>
     <div class="content">
-        <h1>Career Interests & Goals</h1>
+    <h1>Career Interests & Goals</h1>
+    <h2 class="page-subheading">Where I Would Like to Work and Why</h2>
+    <div class="animated-divider" aria-hidden="true"></div>
         <div class="career-grid">
-            <div class="career-card">
-                <h2>Short-Term Goals</h2>
-                <p>Describe your immediate career goals and what you're currently working towards.</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 60%"></div>
+            <div class="company-row">
+                <div class="career-card">
+                    <h2>Barnes & Noble</h2>
+                    <h3>Contact</h3>
+                    <p>Corporate Office: 33 East 17th Street, New York, NY 10003</p>
+                    <p>Phone Number: 1 (800) 843-2665</p>
+                    <p>Email: bninc@bn.com</p>
+                    <img src="images/bnimage.png" alt="Barnes & Noble office" class="company-thumb">
                 </div>
-                <ul class="skills-list">
-                    <li>Goal 1</li>
-                    <li>Goal 2</li>
-                    <li>Goal 3</li>
-                </ul>
+
+                <div class="career-card">
+                    <h2>American Eagle</h2>
+                    <h3>Contact</h3>
+                    <p>Corporate Office: 77 Hot Metal Street Pittsburgh, PA 15203</p>
+                    <p>Phone Number: 1 (888) 232-4535</p>
+                    <p>Email: customerservice@americaneagle.com</p>
+                    <img src="images/aeimage.png" alt="American Eagle office" class="company-thumb">
+                </div>
             </div>
 
-            <div class="career-card">
-                <h2>Dream Career</h2>
-                <p>Share your dream job or career path and why it interests you.</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 40%"></div>
+            <div class="three-grid">
+                <div class="career-card">
+                    <h2>Why These Companies</h2>
+                    <p>I would enjoy working for a company whose products I most often invest in. It would be very interesting to get an insider perspective on these companies and how they operate. Both Barnes & Noble and American Eagle are based on the east coast, and I would like to go out there for work for at least a short time. I would really enjoy exploring Pittsburgh and New York City since I have never visited either city. Acquiring an internship at either of these companies would be a very new and exciting opportunity, and I would be happy to take on a new adventure.</p>
                 </div>
-                <ul class="skills-list">
-                    <li>Career Path 1</li>
-                    <li>Career Path 2</li>
-                    <li>Career Path 3</li>
-                </ul>
-            </div>
 
-            <div class="career-card">
-                <h2>Skills Development</h2>
-                <p>List the skills you're developing to reach your career goals.</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 75%"></div>
+                <div class="career-card">
+                    <h2>My Qualifications</h2>
+                    <p>I am not currently qualified for a high-level position at these companies, but I will be in a few years once I graduate with a degree from the Labovitz School of Business and Economics. Right now, I could get a lower-level position at these companies and try to work my way up the ladder. I have already obtained professional skills from my previous job experience including time management, organization, professionalism, problem-solving, leadership, company loyalty and effective communication.</p>
                 </div>
-                <ul class="skills-list">
-                    <li>Skill 1</li>
-                    <li>Skill 2</li>
-                    <li>Skill 3</li>
-                </ul>
+
+                <div class="career-card">
+                    <h2>The Perfect Team</h2>
+                    <p>I am interested in their products so I would be passionate about the company and fulfilling its needs. I have experience working for a large company because of the job I worked in high school, so I am familiar with how big companies operate. I am also organized, hard-working, dedicated, and I hope to have some field experience through internships once I graduate from UMD. I am very internally motivated, which contributes to my efficiency and productivity in all facets of my life. I am also flexible regarding location; if either Barnes & Noble or American Eagle wanted me to stay in the Midwest or move somewhere else for a while, I would be able to do so with few issues.</p>
+                </div>
             </div>
         </div>
     </div>

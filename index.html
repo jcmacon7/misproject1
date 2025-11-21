@@ -27,6 +27,7 @@
             background: var(--nav-bg);
             z-index: 1000;
             padding: 1rem 0;
+            -webkit-backdrop-filter: blur(8px);
             backdrop-filter: blur(8px);
         }
 
@@ -344,24 +345,28 @@
         /* About section layout and subheading styles */
         .about-row {
             display: flex;
-            gap: 1.5rem; /* tighter gap so images sit closer to each other and the center */
+            gap: 0.6rem; /* tightened so images + textboxes cluster closer to center */
             justify-content: center;
             align-items: flex-start;
             margin: 1rem auto 0; /* center the whole row inside the page */
-            max-width: 1100px; /* constrain row so it centers nicely */
+            max-width: 900px; /* narrower max so the two items sit nearer the center */
             flex-wrap: wrap;
         }
 
         .about-item {
-            /* allow each about item to take roughly half available width but give slightly more room */
-            flex: 0 1 calc(50% - 0.75rem);
-            max-width: 720px; /* increased so captions and thumbnails can be larger */
-            min-width: 320px;
+            /* allow each about item to take roughly half available width but keep them tighter */
+            flex: 0 1 calc(50% - 0.4rem);
+            max-width: 720px; /* increase so the about textboxes can widen under each image */
+            min-width: 300px;
             /* center content inside each about item */
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
+    /* staggered entrance for text-boxes under about items */
+    .about-row .about-item:nth-of-type(1) .text-box { animation-delay: 120ms; }
+    .about-row .about-item:nth-of-type(2) .text-box { animation-delay: 260ms; }
 
 
         .about-item .thumb-wrap {
@@ -431,6 +436,13 @@
         .about-creator {
             animation: enterUp 680ms ease both;
             animation-delay: 260ms;
+        }
+        /* Fallback for browsers that don't support backdrop-filter (e.g., older Safari)
+           Provide a slightly opaque background so content remains readable without blur */
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .nav-container { background: rgba(86,61,124,0.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
+            .card, .career-card, .hobby-card, .section, .game-container, .welcome-video, .transcript-panel { background-color: rgba(0,0,0,0.32); }
+            .text-box { background-color: rgba(0,0,0,0.28); }
         }
     </style>
 </head>
@@ -588,14 +600,14 @@
                     <h3 class="subheading">Hiking</h3>
                     <div class="thumb-wrap">
                         <img src="images/devil'slake.jpg" alt="Devil's Lake" class="thumb-image">
-                        <p class="thumb-caption">I enjoy numerous outdoor activities, including hiking. I like to find different trails in Minnesota and Wisconsin to hike. Some of my favorite hiking trails include the Holzinger trails in Winona, MN, Grandad's Bluff in La Crosse, WI, Congdon Park in Duluth, MN, and the trails at Devil's Lake State Park in WI.</p>
+                        <div class="text-box">I enjoy numerous outdoor activities, including hiking. Hiking provides a way to exercise while enjoying the great outdoors and spending time with friends or family. I like to find different trails in Minnesota and Wisconsin to hike. Some of my favorite hiking trails include the Holzinger trails in Winona, MN, Grandad's Bluff in La Crosse, WI, Congdon Park in Duluth, MN, and the trails at Devil's Lake State Park in WI.</div>
                     </div>
                 </div>
                 <div class="about-item">
                     <h3 class="subheading">Rock Climbing</h3>
                     <div class="thumb-wrap">
                         <img src="images/rockclimbing.jpg" alt="Rock climbing" class="thumb-image">
-                        <p class="thumb-caption">Rock climbing is one of my favorite activities. I have only climbed outside a few times, but I have enjoyed the indoor rock-climbing walls at both the University of Minnesota Duluth and Winona State University in my hometown. Rock climbing is a great sport because climbers can challenge themselves at their own comfort level, gain great upper body strength, and do it year-around because there are indoor and outdoor climbing areas.</p>
+                        <div class="text-box">Rock climbing is one of my favorite activities. I have only climbed outside a few times, but I have enjoyed the indoor rock-climbing walls at both the University of Minnesota Duluth and Winona State University in my hometown. Rock climbing is a great sport because climbers can challenge themselves at their own comfort level, gain great upper body strength, and do it year-around because there are indoor and outdoor climbing areas.</div>
                     </div>
                 </div>
             </div>

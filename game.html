@@ -139,6 +139,13 @@
             background: #4CAF50;
         }
 
+        /* Fallback for browsers that don't support backdrop-filter */
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .nav-container { background: rgba(86,61,124,0.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
+            .game-container, .category-btn, .category-grid { background-color: rgba(0,0,0,0.32); }
+            .text-box { background-color: rgba(0,0,0,0.28); }
+        }
+
         .difficulty-btn.medium {
             background: #FF9800;
         }

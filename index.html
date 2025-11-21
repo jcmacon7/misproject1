@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Interactive Experience</title>
+    <style>
+        :root {
+            --primary-color: #563D7C;    /* Darker Purple */
+            --secondary-color: #E9967A;   /* Dusty Orange */
+            --accent-color: #DEB887;      /* Softer Orange Accent */
+            --text-color: #333;
+            --nav-bg: rgba(86, 61, 124, 0.95); /* Semi-transparent nav background */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            z-index: 1000;
+            padding: 1rem 0;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--secondary-color);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #563D7C, #E9967A);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            /* increase page content max width so captions can expand on large screens */
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards 0.2s;
+        }
+
+        .hero-cta-text {
+            display: inline-block;
+            background: rgba(255,255,255,0.06);
+            color: white;
+            padding: 0.9rem 1.25rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            line-height: 1.35;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards 0.4s;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards 0.4s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(233, 150, 122, 0.4);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                transform: translate(var(--translate-x), var(--translate-y)) rotate(360deg);
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mouse-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease;
+            display: none;
+        }
+
+        .mouse-cursor::after {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Intro/profile image styles */
+        .intro-image {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: white;
+        }
+
+        .profile-image {
+            /* Circular crop: fixed aspect ratio, responsive up to max-width */
+            width: 280px;
+            height: 280px;
+            max-width: 80vw;
+            border: 6px solid var(--secondary-color);
+            border-radius: 50%;
+            object-fit: cover; /* Keep image centered and cropped */
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            display: inline-block;
+        }
+
+        .profile-text {
+            margin-top: 1rem;
+            color: white;
+            font-size: 1.05rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+            padding: 0 1rem;
+        }
+
+        /* Gallery row for two images beneath intro */
+        .profile-row {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .thumb-wrap {
+            max-width: 420px;
+            width: calc(45% - 1rem);
+            min-width: 260px;
+            text-align: left;
+        }
+
+        .thumb-image {
+            /* Larger rectangular crop */
+            width: 100%;
+            height: 260px;
+            border: 6px solid var(--secondary-color);
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            display: block;
+        }
+
+        .thumb-caption {
+            margin-top: 0.75rem;
+            color: white;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            padding: 0 0.25rem;
+        }
+
+        .thumb-subhead {
+            color: var(--accent-color);
+            margin: 0 0 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Hover effect for thumbnails: subtle scale and border glow */
+        .thumb-image {
+            transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+            cursor: pointer;
+        }
+
+        .thumb-image:hover {
+            transform: scale(1.04);
+            box-shadow: 0 18px 40px rgba(233,150,122,0.18);
+            border-color: rgba(233,150,122,0.95);
+        }
+        /* Welcome video container */
+        .welcome-video-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .welcome-video {
+            width: 100%;
+            max-width: 820px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            background: #000;
+        }
+
+        /* Transcript toggle UI */
+        .transcript-wrap {
+            max-width: 820px;
+            margin: 0.5rem auto 1.25rem;
+            text-align: center;
+        }
+
+        .transcript-btn {
+            background: var(--secondary-color);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background .2s ease, transform .12s ease;
+        }
+
+        .transcript-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(233,150,122,0.2);
+        }
+
+        .transcript-panel {
+            max-width: 820px;
+            margin: 0.75rem auto 1.75rem;
+            background: rgba(255,255,255,0.04);
+            padding: 0.9rem 1rem;
+            border-radius: 8px;
+            color: white;
+            line-height: 1.45;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease;
+        }
+
+        .transcript-panel[hidden] { max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; }
+        .transcript-panel:not([hidden]) { max-height: 400px; opacity: 1; }
+
+        @media (max-width: 820px) {
+            .welcome-video { max-width: 100%; }
+            .transcript-panel { max-width: 100%; padding: 0.85rem 1rem; }
+        }
+        /* About section layout and subheading styles */
+        .about-row {
+            display: flex;
+            gap: 1.5rem; /* tighter gap so images sit closer to each other and the center */
+            justify-content: center;
+            align-items: flex-start;
+            margin: 1rem auto 0; /* center the whole row inside the page */
+            max-width: 1100px; /* constrain row so it centers nicely */
+            flex-wrap: wrap;
+        }
+
+        .about-item {
+            /* allow each about item to take roughly half available width but give slightly more room */
+            flex: 0 1 calc(50% - 0.75rem);
+            max-width: 720px; /* increased so captions and thumbnails can be larger */
+            min-width: 320px;
+            /* center content inside each about item */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .about-item .thumb-wrap {
+            /* stack image + caption and center them as a group */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 100%;
+        }
+
+        .about-item .thumb-caption {
+            text-align: center;
+        }
+
+        .subheading {
+            color: var(--accent-color);
+            font-size: 1.15rem;
+            margin: 0 0 0.6rem 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* captions: ensure caption width matches its image container so it is centered directly beneath the image */
+        .thumb-wrap { max-width: 680px; }
+        .thumb-image { width: 100%; height: 320px; }
+        .thumb-caption {
+            width: 100%;           /* match the image/container width */
+            max-width: 680px;     /* keep same max as the thumb-wrap */
+            margin: 0.75rem 0 0;   /* top spacing only; centered by the container */
+            color: white;
+            font-size: 1rem;
+            line-height: 1.5;
+            padding: 0 0.25rem;
+            text-align: center;   /* center text inside the caption box */
+        }
+
+        /* make the about thumbnail images a bit larger */
+        .thumb-wrap { max-width: 680px; }
+        .thumb-image {
+            height: 320px; /* increased height for larger visual impact */
+        }
+
+        @media (max-width: 820px) {
+            .thumb-image { height: 220px; }
+            .about-item { flex: 0 1 100%; max-width: 100%; min-width: 0; }
+            .thumb-caption { width: 100%; max-width: 100%; }
+        }
+
+        /* Keep the two about items strictly side-by-side on sufficiently wide viewports */
+        @media (min-width: 1100px) {
+            .about-row { flex-wrap: nowrap; }
+            .about-item { flex: 0 1 50%; }
+        }
+
+        /* entrance animations */
+        @keyframes enterUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .intro-image {
+            animation: enterUp 640ms ease both;
+            animation-delay: 120ms;
+        }
+
+        .about-creator {
+            animation: enterUp 680ms ease both;
+            animation-delay: 260ms;
+        }
+    </style>
+</head>
+<body>
+    <div class="mouse-cursor"></div>
+    <nav class="nav-container">
+        <ul class="nav-list">
+            <li><a href="index.html" class="nav-link active">Home</a></li>
+            <li><a href="hobbies.html" class="nav-link">Hobbies</a></li>
+            <li><a href="discover.html" class="nav-link">Discover Duluth</a></li>
+            <li><a href="resume.html" class="nav-link">Resume</a></li>
+            <li><a href="career.html" class="nav-link">Career Interests</a></li>
+            <li><a href="game.html" class="nav-link">Interactive Game</a></li>
+        </ul>
+    </nav>
+    <div class="hero">
+        <div class="floating-shapes" id="floatingShapes"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to My Portfolio</h1>
+            <div class="hero-cta-text">Begin Exploring My Website Now!</div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating shapes
+        const floatingShapes = document.getElementById('floatingShapes');
+        for (let i = 0; i < 15; i++) {
+            const shape = document.createElement('div');
+            shape.className = 'shape';
+            const size = Math.random() * 100 + 50;
+            shape.style.width = size + 'px';
+            shape.style.height = size + 'px';
+            shape.style.left = Math.random() * 100 + '%';
+            shape.style.top = Math.random() * 100 + '%';
+            shape.style.opacity = Math.random() * 0.3;
+            shape.style.setProperty('--translate-x', (Math.random() * 400 - 200) + 'px');
+            shape.style.setProperty('--translate-y', (Math.random() * 400 - 200) + 'px');
+            floatingShapes.appendChild(shape);
+        }
+
+        // Custom cursor
+        const cursor = document.querySelector('.mouse-cursor');
+        if (window.matchMedia("(pointer: fine)").matches) {
+            cursor.style.display = 'block';
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+        }
+
+        // Interactive button effect (guarded: only attach if the CTA exists)
+        const ctaButton = document.getElementById('ctaButton');
+        if (ctaButton) {
+            ctaButton.addEventListener('mouseover', () => {
+                if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            });
+            ctaButton.addEventListener('mouseout', () => {
+                if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+            ctaButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.background = 'rgba(255, 255, 255, 0.8)';
+                ripple.style.borderRadius = '50%';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.left = (e.offsetX - 10) + 'px';
+                ripple.style.top = (e.offsetY - 10) + 'px';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                ctaButton.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        }
+
+        // Parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            shapes.forEach((shape, index) => {
+                const speed = 1 + index * 0.1;
+                const translateX = (x * 100 * speed) - (50 * speed);
+                const translateY = (y * 100 * speed) - (50 * speed);
+                shape.style.transform = `translate(${translateX}px, ${translateY}px) rotate(${translateX * 2}deg)`;
+            });
+        });
+    </script>
+    <script>
+        // Transcript toggle handler
+        document.addEventListener('DOMContentLoaded', function () {
+            const btn = document.getElementById('transcriptToggle');
+            const panel = document.getElementById('transcriptPanel');
+            if (!btn || !panel) return;
+            btn.addEventListener('click', () => {
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                if (expanded) {
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.textContent = 'View Transcript';
+                    panel.hidden = true;
+                } else {
+                    btn.setAttribute('aria-expanded', 'true');
+                    btn.textContent = 'Hide Transcript';
+                    panel.hidden = false;
+                    // move focus to panel for accessibility
+                    panel.focus();
+                }
+            });
+            // allow pressing Escape to close when open
+            panel.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !panel.hidden) {
+                    btn.click();
+                    btn.focus();
+                }
+            });
+            // make panel focusable
+            panel.setAttribute('tabindex', '-1');
+        });
+    </script>
+    
+    <!-- Main container: video at top, about section, then profile -->
+    <div class="container">
+        <!-- Welcome media: video + transcript toggle -->
+        <section class="welcome-media" aria-label="welcome media">
+            <div class="welcome-video-container" aria-label="Welcome video">
+                <video id="welcomeVideo" class="welcome-video" controls preload="metadata" playsinline>
+                    <source src="videos/welcomevideo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="transcript-wrap">
+                <button class="transcript-btn" id="transcriptToggle" aria-expanded="false" aria-controls="transcriptPanel">View Transcript</button>
+            </div>
+            <div id="transcriptPanel" class="transcript-panel" role="region" aria-label="video transcript" hidden>
+                <p>Hello, my name is Jillian! I am from Winona, Minnesota, and I am studying management at the University of Minnesota Duluth. On this website, you will learn more about me, including my love for the outdoors, what I like about Duluth and UMD, and my future career goals. Also, feel free to test your knowledge in various subjects through my fun and interactive trivia game! Thank you for visiting my website and have fun exploring!</p>
+            </div>
+        </section>
+
+        <!-- About the Creator: two images + captions -->
+
+        <!-- About the Creator heading placed above the profile -->
+        <h2 style="color:var(--accent-color); text-align:center; margin-top:1.5rem;">About the Creator</h2>
+
+        <!-- Profile (moved above the About section) -->
+        <section class="intro-image" style="margin-top:1.25rem;">
+            <img src="images/Untitled.jpeg" alt="Jillian portrait" class="profile-image">
+            <p class="profile-text">Hello, my name is Jillian, and I am the creator of this website! I am a management major at the University of Minnesota Duluth. On this website, users can discover more about me, where I go to school, my future career aspirations, and enjoy a fun, interactive game!</p>
+        </section>
+
+        <!-- About the Creator: two images + captions (devil'slake + rockclimbing) -->
+        <section class="about-creator">
+            <div class="about-row" aria-label="more pictures">
+                <div class="about-item">
+                    <h3 class="subheading">Hiking</h3>
+                    <div class="thumb-wrap">
+                        <img src="images/devil'slake.jpg" alt="Devil's Lake" class="thumb-image">
+                        <p class="thumb-caption">I enjoy numerous outdoor activities, including hiking. I like to find different trails in Minnesota and Wisconsin to hike. Some of my favorite hiking trails include the Holzinger trails in Winona, MN, Grandad's Bluff in La Crosse, WI, Congdon Park in Duluth, MN, and the trails at Devil's Lake State Park in WI.</p>
+                    </div>
+                </div>
+                <div class="about-item">
+                    <h3 class="subheading">Rock Climbing</h3>
+                    <div class="thumb-wrap">
+                        <img src="images/rockclimbing.jpg" alt="Rock climbing" class="thumb-image">
+                        <p class="thumb-caption">Rock climbing is one of my favorite activities. I have only climbed outside a few times, but I have enjoyed the indoor rock-climbing walls at both the University of Minnesota Duluth and Winona State University in my hometown. Rock climbing is a great sport because climbers can challenge themselves at their own comfort level, gain great upper body strength, and do it year-around because there are indoor and outdoor climbing areas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+    <script>
+        // If the user clicks a link to game.html from this page, set a flag so the game page
+        // can attempt to start audio playback immediately after navigation.
+        (function () {
+            document.addEventListener('click', function (e) {
+                // find closest anchor
+                const a = e.target.closest && e.target.closest('a[href$="game.html"]');
+                if (a) {
+                    try { sessionStorage.setItem('triviaPlayOnNavigate', 'true'); } catch (err) {}
+                }
+            }, true);
+        })();
+    </script>
+</html>

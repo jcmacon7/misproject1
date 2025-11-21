@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Duluth & UMD</title>
+    <style>
+        :root {
+            --primary-color: #563D7C;
+            --secondary-color: #E9967A;
+            --accent-color: #DEB887;
+            --text-color: #333;
+            --nav-bg: rgba(86, 61, 124, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #563D7C, #E9967A);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            z-index: 1000;
+            padding: 1rem 0;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--secondary-color);
+        }
+
+        .content {
+            padding: 120px 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .location-sections {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .place-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .place-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+
+        /* UMD promo/video + info layout */
+        /* Video appears above and spans the content; info boxes sit side-by-side beneath the video on wide screens */
+        .umd-video-container {
+            width: 100%;
+            margin: 0 0 1rem 0;
+        }
+
+        .umd-video {
+            width: 100%;
+            max-width: 980px; /* keep the video large but not full-bleed */
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            background: #000;
+            display: block;
+            margin: 0 auto; /* center the video */
+        }
+
+        /* Text columns display side-by-side under the video on wide screens */
+        .text-columns {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            margin: 0;
+            align-items: stretch;
+        }
+
+        .text-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+            backdrop-filter: blur(6px);
+            flex: 1 1 0;
+        }
+
+        /* Duluth thumbnail + text layout inside the place area */
+        .duluth-box {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .duluth-thumb {
+            width: 140px;
+            height: 105px; /* 4:3-ish thumbnail */
+            object-fit: cover;
+            border-radius: 8px;
+            flex: 0 0 140px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+            border: 2px solid rgba(255,255,255,0.06);
+        }
+
+        @media (max-width: 600px) {
+            .duluth-box { flex-direction: column; }
+            .duluth-thumb { width: 100%; height: auto; flex: 0 0 auto; }
+        }
+
+        .text-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+            backdrop-filter: blur(6px);
+        }
+
+        @media (max-width: 980px) {
+            /* On medium/narrow screens stack the info boxes and keep video full-width */
+            .text-columns { flex-direction: column; }
+            .umd-video { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <ul class="nav-list">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="hobbies.html" class="nav-link">Hobbies</a></li>
+            <li><a href="discover.html" class="nav-link active">Discover Duluth</a></li>
+            <li><a href="resume.html" class="nav-link">Resume</a></li>
+            <li><a href="career.html" class="nav-link">Career Interests</a></li>
+            <li><a href="game.html" class="nav-link">Interactive Game</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <h1>Discover Duluth & UMD</h1>
+        <div class="location-sections">
+            <section class="section">
+                <h2>Beautiful Duluth</h2>
+                <p>Discover the natural beauty and attractions of Duluth, Minnesota.</p>
+                <div class="place-grid">
+                    <div class="text-box">
+                        <div class="duluth-box">
+                            <img src="images/lakesuperior.jpg" alt="View near Lake Superior" class="duluth-thumb">
+                            <div class="duluth-text">
+                                <p>I love spending time outdoors and trying new activities, and Duluth provides plenty of opportunity to do so with a wide variety of outdoor and indoor areas to explore different interests. Although it can get frosty in the winter, Duluth is stunning to visit in the summer or autumn. Duluth residents can enjoy Lake Superior’s beauty from on the hill, on its shore, or in the water. Duluth is large enough to provide some big city opportunities while still having a safe and connected local environment.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>University of Minnesota Duluth</h2>
+                <p>Explore what makes UMD a unique and exceptional place for education.</p>
+                <!-- UMD promo video placed above the info boxes -->
+                <div class="umd-video-container">
+                    <video class="umd-video" controls preload="metadata" playsinline>
+                        <source src="videos/umdpromovid.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <!-- Two side-by-side informational text boxes below the video -->
+                <div class="text-columns" aria-label="UMD information">
+                    <section class="text-box" aria-labelledby="why-umd-head">
+                        <h3 id="why-umd-head">Why UMD</h3>
+                        <p>I chose the University of Minnesota Duluth because it is located in a beautiful area, is affordable, and has many strong programs in the Labovitz School of Business and Economics for students to explore various majors. I also like that UMD is a big enough school that provides impressive opportunities for students, but small enough that students do not just feel like another number. I also like that UMD promotes a positive culture for students to express and explore their interests, which creates a safe and comfortable environment for everyone.</p>
+                    </section>
+                    <section class="text-box" aria-labelledby="experiences-head">
+                        <h3 id="experiences-head">My UMD Experiences</h3>
+                        <p>I have not been at UMD very long, but I have really enjoyed my time here so far. I often utilize many beneficial aspects of UMD, including free access to the gym, free bus rides to anywhere in Duluth, the indoor access to almost every building on campus, and the numerous engaging clubs offered. I am involved in the Coffee Club, Book Club, Women in Business Club, and a Bible Study. I also enjoy attending events such as football games, hockey games, and shows at the Marshall W. Alworth planetarium. There are a wide variety of activities and extracurriculars at UMD for all students.</p>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+    <script>
+        (function () {
+            document.addEventListener('click', function (e) {
+                const a = e.target.closest && e.target.closest('a[href$="game.html"]');
+                if (a) {
+                    try { sessionStorage.setItem('triviaPlayOnNavigate', 'true'); } catch (err) {}
+                }
+            }, true);
+        })();
+    </script>
+</html>

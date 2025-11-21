@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Resume</title>
+	<style>
+		:root {
+			--primary-color: #563D7C;
+			--secondary-color: #E9967A;
+			--accent-color: #DEB887;
+			--text-color: #333;
+			--nav-bg: rgba(86, 61, 124, 0.95);
+		}
+
+	* { box-sizing: border-box; margin: 0; padding: 0; }
+
+	/* awards list styling */
+	.awards-list { list-style: disc; margin-left: 1.25rem; color: #fff; }
+	.awards-list li { margin-bottom: 0.35rem; }
+	.awards-list .sub-list { list-style: circle; margin-left: 1rem; margin-top: 0.25rem; }
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+			color: white;
+			min-height: 100vh;
+		}
+
+		.nav-container {
+			position: fixed; top: 0; left: 0; width: 100%;
+			background: var(--nav-bg); z-index: 1000; padding: 1rem 0;
+			backdrop-filter: blur(8px);
+		}
+
+		.nav-list { display:flex; justify-content:center; gap:2rem; list-style:none; align-items:center; }
+		.nav-link { color: white; text-decoration:none; padding:0.5rem 1rem; border-radius:25px; }
+		.nav-link:hover { background: var(--secondary-color); transform: translateY(-2px); }
+		.nav-link.active { background: var(--secondary-color); }
+
+		.content { max-width: 1000px; margin: 120px auto 40px; padding: 2rem; }
+
+		.card {
+			background: rgba(255,255,255,0.06);
+			border-radius: 12px; padding: 1.5rem; backdrop-filter: blur(8px);
+			box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+		}
+
+		.download-btn {
+			display: inline-block;
+			background: var(--secondary-color);
+			color: white;
+			padding: 0.75rem 1rem;
+			border-radius: 24px;
+			text-decoration: none;
+			font-weight: 600;
+		}
+		.download-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+
+		/* contact image inside the aside */
+		.contact-figure {
+			margin-top: 1rem;
+			text-align: center;
+		}
+
+			/* when multiple contact figures stack, add a larger gap between them for clarity */
+			.contact-figure + .contact-figure { margin-top: 3.6rem; }
+			@media (max-width: 520px) {
+				/* slightly smaller but still noticeable gap on very small screens */
+				.contact-figure + .contact-figure { margin-top: 2rem; }
+			}
+
+		.contact-thumb {
+			width: 100%;
+			max-width: 240px;
+			height: auto;
+			border-radius: 8px;
+			border: 2px solid rgba(255,255,255,0.06);
+			box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+			display: block;
+			margin: 0 auto 0.5rem;
+			object-fit: cover;
+		}
+
+		.contact-caption {
+			font-size: 0.85rem;
+			color: #fff;
+			opacity: 0.9;
+			line-height: 1.2;
+		}
+
+		h1 { color: var(--accent-color); margin-bottom: 0.5rem; }
+		h2 { color: var(--secondary-color); margin-top: 1rem; margin-bottom: .5rem; }
+		p, li { color: #fff; opacity: 0.95; line-height:1.5; }
+
+		/* education lines: keep them non-bold and slightly larger than body text */
+		.edu-school {
+			font-weight: 700; /* bold */
+			color: #fff;
+			margin: 0.25rem 0;
+			font-size: 1rem;
+		}
+
+		/* allow a normal bullet for specific lists (e.g., education details) */
+		.edu-list {
+			list-style: disc; /* show bullet */
+			margin-left: 1.25rem;
+			color: #fff;
+		}
+
+		.two-col { display: grid; grid-template-columns: 1fr 320px; gap: 1.25rem; }
+		.meta { background: rgba(255,255,255,0.03); padding: 1rem; border-radius:8px; }
+
+		ul { list-style: none; margin-left: 0.5rem; }
+
+		@media (max-width: 880px) {
+			.two-col { grid-template-columns: 1fr; }
+		}
+
+	</style>
+</head>
+<body>
+	<nav class="nav-container">
+		<ul class="nav-list">
+			<li><a class="nav-link" href="index.html">Home</a></li>
+			<li><a class="nav-link" href="hobbies.html">Hobbies</a></li>
+			<li><a class="nav-link" href="discover.html">Discover</a></li>
+			<li><a class="nav-link active" href="resume.html">Resume</a></li>
+			<li><a class="nav-link" href="career.html">Career Interests</a></li>
+			<li><a class="nav-link" href="game.html">Interactive Game</a></li>
+		</ul>
+	</nav>
+
+	<main class="content">
+		<div class="card">
+					<div class="two-col">
+						<section>
+							<h1>Jillian Macon</h1>
+							<p style="margin-bottom:1rem;">&nbsp;</p>
+							<p>
+								<a class="download-btn" href="files/jillianmaconresume.pdf" download="jillianmaconresume.pdf">Download Resume</a>
+							</p>
+
+							<h2>Experience</h2>
+							<div>
+								<h3>Student Worker - University of Minnesota Duluth Superior Dining Services</h3>
+								<p><em>September 2025-present</em></p>
+								<ul>
+									<li>• Prepare food to serve to students</li>
+									<li>• Clean and organize dishes</li>
+								</ul>
+							</div>
+							<div>
+								<h3>Customer Service Representative - Kwik Trip</h3>
+								<p><em>March 2023-present</em></p>
+								<ul>
+									<li>• Provide customer service including product assistance and cashiering</li>
+									<li>• Problem solve and shift priorities quickly</li>
+									<li>• Maintain a clean and inviting store</li>
+								</ul>
+							</div>
+
+							<h2>Education</h2>
+							<div>
+								<p class="edu-school">University of Minnesota Duluth - Management (May 2029)</p>
+							</div>
+							<div>
+								<p class="edu-school">Winona Senior High School - June 2025</p>
+								<ul class="edu-list">
+									<li>4.343 (weighted on a 4.0 scale); class rank #1</li>
+								</ul>
+							</div>
+
+							<h2>Scholarships & Awards</h2>
+							<ul class="awards-list">
+								<li>Winona Senior High School Certificate of Achievement - Highest Honors Graduate, 2025</li>
+								<li>Winona Senior High School Minnesota State High School League AAA Award, 2025</li>
+								<li>Minnesota Department of Education Minnesota Gold Bilingual Seal, 2025</li>
+								<li>National Polish American Sports Hall of Fame Stan Musial Scholarship, 2025</li>
+								<li>Winona Senior High School Class of 1974 WSHS Spirit Memorial Scholarship, 2025</li>
+								<li>Tom Blacklock Memorial Scholarship, 2025</li>
+								<li>PEO Sue Spaete Scholarship, 2025</li>
+								<li>Fueling Minnesota’s Bob Krogman MPM Memorial Scholarship, 2025</li>
+								<li>AP Scholar with Distinction, 2024-2025</li>
+								<li>Yale Book Award for outstanding high school junior scholar-citizen, 2024</li>
+								<li>Minnesota State History Day Competition, 2020
+									<ul class="sub-list">
+										<li>Ida B. Wells: Pioneer Journalist and Civil Rights Activist</li>
+									</ul>
+									</li>
+									<li>Minnesota State Science Fair Competition, 2019
+										<ul class="sub-list">
+											<li>A Causation of Varied Melt Rates in Ice Cream</li>
+											<li>Winner of Certificate of Excellence award for scientific research sponsored by the Graduate Women in Science Twin Cities chapter</li>
+										</ul>
+									</li>
+								</ul>
+						</section>
+
+				<aside class="meta">
+					<h3>Contact</h3>
+					<p>Email: macon015@d.umn.edu</p>
+					<p>Location: Duluth, MN</p>
+					<figure class="contact-figure">
+						<img src="images/graduation.jpg" alt="Graduation photo, Winona Senior High School June 2025" class="contact-thumb">
+						<figcaption class="contact-caption">Graduation from Winona Senior High School, June 2025</figcaption>
+					</figure>
+					<figure class="contact-figure">
+						<img src="images/kwiktrippic.jpg" alt="Jillian at Kwik Trip banquet" class="contact-thumb">
+						<figcaption class="contact-caption">At the 2025 Fueling Minnesota banquet to accept the Bob Krogman MPM Memorial Scholarship with Joe Zietlow, Kwik Trip's Industry and Trade Associate Manager</figcaption>
+					</figure>
+				</aside>
+			</div>
+		</div>
+	</main>
+</body>
+</html>
+

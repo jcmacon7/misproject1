@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Challenge</title>
+    <audio id="backgroundMusic" loop>
+        <source src="audio/triviamusic.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <style>
+        :root {
+            --primary-color: #563D7C;
+            --secondary-color: #E9967A;
+            --accent-color: #DEB887;
+            --text-color: #333;
+            --nav-bg: rgba(86, 61, 124, 0.95);
+            --correct-color: #4CAF50;
+            --wrong-color: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #563D7C, #E9967A);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            z-index: 1000;
+            padding: 1rem 0;
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--secondary-color);
+        }
+
+        .content {
+            padding: 120px 20px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            color: var(--accent-color);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .category-btn {
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .difficulty-btn {
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn.easy {
+            background: #4CAF50;
+        }
+
+        .difficulty-btn.medium {
+            background: #FF9800;
+        }
+
+        .difficulty-btn.hard {
+            background: #f44336;
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+        }
+
+        .question-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #question-text {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feedback-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            z-index: 1000;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -60%); }
+            15% { opacity: 1; transform: translate(-50%, -50%); }
+            85% { opacity: 1; transform: translate(-50%, -50%); }
+            100% { opacity: 0; transform: translate(-50%, -40%); }
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .difficulty-info {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        .back-btn {
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        .option-btn.correct {
+            background: var(--correct-color);
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background: var(--wrong-color);
+            color: white;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #timer {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+        }
+
+        #progress, #score {
+            font-size: 1.2rem;
+        }
+
+        .end-game {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .end-game h2 {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .end-game p {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .end-game button {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .end-game button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(233, 150, 122, 0.3);
+        }
+
+        /* Audio controls */
+        .audio-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .audio-btn {
+            background: rgba(255,255,255,0.08);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .audio-btn:hover { filter: brightness(1.15); }
+
+        .volume-range {
+            width: 180px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <ul class="nav-list">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="hobbies.html" class="nav-link">Hobbies</a></li>
+            <li><a href="discover.html" class="nav-link">Discover Duluth</a></li>
+            <li><a href="resume.html" class="nav-link">Resume</a></li>
+            <li><a href="career.html" class="nav-link">Career Interests</a></li>
+            <li><a href="game.html" class="nav-link active">Interactive Game</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <h1>Ultimate Trivia Challenge</h1>
+        <!-- Audio controls placed between heading and category selection as requested -->
+        <div class="audio-controls" aria-label="Background music controls">
+            <button id="audioMute" class="audio-btn" aria-pressed="false">Unmuted</button>
+            <label for="volumeRange" style="font-size:0.9rem;opacity:0.9;">Volume</label>
+            <input id="volumeRange" class="volume-range" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="Volume">
+        </div>
+
+        <div id="game-container" class="game-container">
+            <div class="category-selection">
+                <h2>Select a Category</h2>
+                <div class="category-grid">
+                    <!-- Categories will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/movies.js"></script>
+    <!-- Load a validated trivia dataset before the game engine -->
+    <script src="js/trivia_canonical.js"></script>
+    <!-- Trivia engine (defensive) -->
+    <script src="js/trivia_clean.js"></script>
+    <script>
+        // Audio control initialization
+        function initAudioControls() {
+            const audio = document.getElementById('backgroundMusic');
+            const muteBtn = document.getElementById('audioMute');
+            const volumeRange = document.getElementById('volumeRange');
+
+            // If a previous page set a flag indicating the user clicked a link to this page,
+            // try to start playback immediately. This uses sessionStorage so the navigation
+            // click (a user gesture) can allow autoplay in some browsers.
+            try {
+                const playOnNav = sessionStorage.getItem('triviaPlayOnNavigate');
+                if (playOnNav === 'true') {
+                    // Attempt to play; if blocked we'll still allow gesture-based start later.
+                    audio.play().catch(() => {});
+                    sessionStorage.removeItem('triviaPlayOnNavigate');
+                }
+            } catch (e) {
+                console.warn('Could not read sessionStorage for autoplay flag', e);
+            }
+
+            // Load saved settings
+            const savedVolume = localStorage.getItem('triviaVolume');
+            const savedMuted = localStorage.getItem('triviaMuted');
+            if (savedVolume !== null) {
+                audio.volume = parseFloat(savedVolume);
+                volumeRange.value = audio.volume;
+            } else {
+                audio.volume = 0.6;
+                volumeRange.value = 0.6;
+            }
+            if (savedMuted === 'true') {
+                audio.muted = true;
+                muteBtn.textContent = 'Muted';
+                muteBtn.setAttribute('aria-pressed','true');
+            } else {
+                audio.muted = false;
+                muteBtn.textContent = 'Unmuted';
+                muteBtn.setAttribute('aria-pressed','false');
+            }
+
+            // No play/pause controls — audio will loop and start on first user gesture.
+
+            muteBtn.addEventListener('click', () => {
+                audio.muted = !audio.muted;
+                localStorage.setItem('triviaMuted', audio.muted ? 'true' : 'false');
+                muteBtn.textContent = audio.muted ? 'Muted' : 'Unmuted';
+                muteBtn.setAttribute('aria-pressed', audio.muted ? 'true' : 'false');
+            });
+
+            volumeRange.addEventListener('input', (e) => {
+                const vol = parseFloat(e.target.value);
+                audio.volume = vol;
+                localStorage.setItem('triviaVolume', vol.toString());
+                if (audio.muted && vol > 0) {
+                    audio.muted = false;
+                    muteBtn.textContent = 'Unmuted';
+                    muteBtn.setAttribute('aria-pressed','false');
+                    localStorage.setItem('triviaMuted', 'false');
+                }
+            });
+
+            // Attempt to play on first user interaction if autoplay was blocked.
+            function gesturePlay() {
+                // only try if paused
+                if (audio.paused) {
+                    audio.play().then(() => updatePlayState()).catch(() => updatePlayState());
+                } else {
+                    updatePlayState();
+                }
+            }
+
+            document.addEventListener('click', function onFirstGesture() {
+                gesturePlay();
+                document.removeEventListener('click', onFirstGesture);
+            }, { once: true });
+        }
+
+        // Start the game and audio controls on DOM ready
+        document.addEventListener('DOMContentLoaded', function () {
+            try { initAudioControls(); } catch (e) { console.error('Audio init failed', e); }
+            showCategorySelection();
+        });
+    </script>
+</body>
+</html>

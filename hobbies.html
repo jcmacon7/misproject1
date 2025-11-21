@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Hobbies</title>
+    <style>
+        :root {
+            --primary-color: #563D7C;
+            --secondary-color: #E9967A;
+            --accent-color: #DEB887;
+            --text-color: #333;
+            --nav-bg: rgba(86, 61, 124, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #563D7C, #E9967A);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            z-index: 1000;
+            padding: 1rem 0;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--secondary-color);
+        }
+
+        .content {
+            padding: 120px 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hobby-grid {
+            /* stack the bottom text boxes vertically and make them stretch across the content area */
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding: 2rem 0;
+            align-items: stretch;
+        }
+
+        .hobby-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .hobby-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+        /* Two-column text boxes for hobbies page */
+        .text-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .text-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            transform: translateY(12px);
+            animation: enterUp 560ms cubic-bezier(.2,.9,.2,1) forwards;
+        }
+
+        @media (max-width: 760px) {
+            .text-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* entrance animation used for text-boxes */
+        @keyframes enterUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* stagger the two bottom text-box animations */
+        .hobby-grid .text-box:nth-of-type(1) { animation-delay: 80ms; }
+        .hobby-grid .text-box:nth-of-type(2) { animation-delay: 220ms; }
+        /* Photo row under text boxes */
+        .photo-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1.25rem 0 2rem;
+        }
+
+        .photo-thumb {
+            /* make frames smaller while remaining responsive */
+            flex: 1 1 260px;
+            max-width: 260px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid var(--secondary-color);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+            background: rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            transition: transform .25s ease, box-shadow .35s ease, border-color .25s ease;
+        }
+
+        /* media box that enforces an aspect ratio for the image frame */
+        .photo-media {
+            width: 100%;
+            aspect-ratio: 3 / 4; /* width : height -> vertical rectangle */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-media img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform .35s ease;
+        }
+
+        /* hover / focus effects: subtle scale + glow */
+        .photo-thumb:hover,
+        .photo-thumb:focus-within {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.32), 0 0 18px rgba(233,150,122,0.18);
+            border-color: rgba(233,150,122,0.9);
+        }
+
+        .photo-thumb:hover .photo-media img,
+        .photo-thumb:focus-within .photo-media img {
+            transform: scale(1.04);
+        }
+
+        .photo-thumb figcaption {
+            padding: 0.5rem 0.75rem 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            background: transparent;
+        }
+
+        @media (max-width: 760px) {
+            .photo-thumb {
+                max-width: 100%;
+                flex-basis: 100%;
+            }
+            .photo-media {
+                aspect-ratio: 3 / 4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <ul class="nav-list">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="hobbies.html" class="nav-link active">Hobbies</a></li>
+            <li><a href="discover.html" class="nav-link">Discover Duluth</a></li>
+            <li><a href="resume.html" class="nav-link">Resume</a></li>
+            <li><a href="career.html" class="nav-link">Career Interests</a></li>
+            <li><a href="game.html" class="nav-link">Interactive Game</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <h1>My Hobbies & Interests</h1>
+
+        <div class="text-columns" aria-label="Hobbies descriptions">
+            <section class="text-box" aria-labelledby="outdoor-head">
+                <h2 id="outdoor-head">Outdoors & Water Activities</h2>
+                <p>I enjoy numerous outdoor activities such as hiking, paddleboarding, kayaking, biking, walking, rollerblading, and rock climbing. Both my hometown, Winona, Minnesota, and Duluth have many opportunities to explore natural beauties through these outdoor activities. Winona and Duluth are both bordered by beautiful bluffs and powerful water sources, with the Mississippi river in Winona and Lake Superior in Duluth. The bluffs provide many stunning hiking trails that always end in a gorgeous view of the surrounding area, and the lake and river provide refreshing places to swim, paddleboard, kayak, and go boating.</p>
+            </section>
+            <section class="text-box" aria-labelledby="parks-head">
+                <h2 id="parks-head">Parks & Travel</h2>
+                <p>I also enjoy visiting national and state parks. I have been to parks such as Glacier National Park, Everglades National Park, Grand Canyon National Park, Great Sand Dunes National Park, Whitewater State Park, and Devil’s Lake State Park. I hope to visit all of the US National Parks one day. This summer, I also had the opportunity to go to Ojcowski National Park, a national park in Poland. I like to go hiking, swimming, and sightseeing at these parks.</p>
+            </section>
+        </div>
+
+        <div class="photo-row" aria-label="Hobby photos">
+            <figure class="photo-thumb">
+                <div class="photo-media">
+                    <img src="images/ojcowski.jpg" alt="Ojcowski National Park landscape">
+                </div>
+                <figcaption>Exploring Ojcowski National Park in Poland</figcaption>
+            </figure>
+            <figure class="photo-thumb">
+                <div class="photo-media">
+                    <img src="images/sandboarding.jpg" alt="Sandboarding at the dunes">
+                </div>
+                <figcaption>Sandboarding at Great Sand Dunes National Park</figcaption>
+            </figure>
+            <figure class="photo-thumb">
+                <div class="photo-media">
+                    <img src="images/selfiewithsis.jpg" alt="Selfie with sister">
+                </div>
+                <figcaption>Having fun on a hike through the Garden of the Gods in Colorado with family and friends</figcaption>
+            </figure>
+            <figure class="photo-thumb">
+                <div class="photo-media">
+                    <img src="images/sugarloaf.jpg" alt="Sugarloaf Park or mountain view">
+                </div>
+                <figcaption>Climbing the Sugar Loaf hiking trail in Winona, MN with my younger sister</figcaption>
+            </figure>
+        </div>
+
+        <div class="hobby-grid">
+            <section class="text-box" aria-labelledby="dunes-head">
+                <h2 id="dunes-head">Riding Down the Dunes</h2>
+                <p>I have had a lot of fun exploring different parks around the world. Visiting these gorgeous areas have created some of my favorite memories. For example, I went to Great Sand Dunes National Park one summer, and my family got up early one morning, hiked out to the sand dunes, and got to ride down the sand dunes on sand boards and sleds. It was similar to snowboarding, and we had a lot of fun riding down all of the big dunes. We had to go early in the morning before the sun came out and heated the sand up too much. My family was scraped up and tired afterwards, but it was one of most fun and unique activities I have ever done, and I am so grateful I had the opportunity to do it.</p>
+            </section>
+            <section class="text-box" aria-labelledby="so-what-head">
+                <h2 id="so-what-head">So What?</h2>
+                <p>These activities are important to me because they allow me to explore different areas in the US and around the world that I otherwise would have no reason to visit. Some of my most memorable experiences occurred when I got to do different outdoor activities. I also think it is important to protect the natural beauty within our world, and organizations such as the National Parks Service need support from people to continue operating.</p>
+            </section>
+        </div>
+    </div>
+</body>
+    <script>
+        (function () {
+            document.addEventListener('click', function (e) {
+                const a = e.target.closest && e.target.closest('a[href$="game.html"]');
+                if (a) {
+                    try { sessionStorage.setItem('triviaPlayOnNavigate', 'true'); } catch (err) {}
+                }
+            }, true);
+        })();
+    </script>
+</html>
